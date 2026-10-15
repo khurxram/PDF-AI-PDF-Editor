@@ -2,12 +2,6 @@
 
 A free, open collection of **28 PDF and image tools** that run **entirely in your browser**.
 No uploads, no accounts, no server-side processing — your files never leave the device.
-
-Live site: **https://pdfai.site**
-
-Built with [Astro](https://astro.build) and deployed as a fully static site to
-Cloudflare (Pages / Workers assets).
-
 ---
 
 ## Highlights
