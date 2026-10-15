@@ -1,0 +1,50 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SEO from '../components/SEO.astro';
+
+export interface Props {
+	title?: string;
+	description?: string;
+	/** Path or absolute URL of the social sharing image. */
+	image?: string;
+	/** Alt text for the social sharing image. */
+	imageAlt?: string;
+	/** Open Graph type, defaults to "website". */
+	ogType?: string;
+	/** Set true for non-public pages (404, utility routes). */
+	noindex?: boolean;
+	/** JSON-LD structured data, only when the page content supports it. */
+	jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+	title = 'PDF AI — Free PDF Editor and Online PDF Tools',
+	description = 'Edit, merge, split, compress, and convert PDF files with PDF AI. Explore free online PDF tools to manage documents quickly and easily.',
+	image,
+	imageAlt,
+	ogType = 'website',
+	noindex = false,
+	jsonLd,
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<SEO title={title} description={description} ogImage={image} ogImageAlt={imageAlt} ogType={ogType} noindex={noindex} jsonLd={jsonLd} />
+<link rel="icon" href="/favicon.svg" />
+<script is:inline>(function(){try{document.documentElement.classList.add('js');}catch(e){}})();</script>
+<script is:inline>(function(){try{var t=localStorage.getItem('theme');if(t!=='dark'&&t!=='light'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='light';}})();</script>
+<noscript><style>.nav-toggle,.drawer-head,.nav-trigger,.nav-search,.theme-toggle{display:none!important}.menu-cluster{display:block!important;width:100%!important}.clean-nav{flex-wrap:wrap}.main-nav{position:static!important;width:auto!important;height:auto!important;padding:0!important;border:0!important;box-shadow:none!important;background:transparent!important;transform:none!important;visibility:visible!important;flex:1 0 100%;flex-direction:column;align-items:flex-start;overflow:visible!important;transition:none!important}.all-tools-menu .menu,.main-nav .all-tools-menu .menu{position:static!important;display:block!important;width:auto!important;max-width:none!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;max-height:none!important;overflow:visible!important;top:auto!important;left:auto!important;right:auto!important}</style></noscript>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<Header />
+<main id="main"><slot /></main>
+<Footer />
+<script is:inline>(function(){try{var doc=document.documentElement;var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;var items=document.querySelectorAll('[data-reveal]');if(reduce||!('IntersectionObserver' in window)){doc.classList.remove('js');return;}var io=new IntersectionObserver(function(entries){for(var i=0;i<entries.length;i++){var e=entries[i];if(!e.isIntersecting)continue;e.target.classList.add('is-revealed');io.unobserve(e.target);}},{rootMargin:'0px 0px -60px 0px',threshold:0.06});for(var j=0;j<items.length;j++){io.observe(items[j]);}document.addEventListener('animationend',function(ev){var t=ev.target;if(t&&t.classList&&t.classList.contains('is-revealed')){t.classList.add('is-done');}});var header=document.querySelector('.site-header');if(header){var sync=function(){header.classList.toggle('is-scrolled',window.scrollY>8);};sync();window.addEventListener('scroll',sync,{passive:true});}}catch(e){document.documentElement.classList.remove('js');}})();</script>
+</body>
+</html>

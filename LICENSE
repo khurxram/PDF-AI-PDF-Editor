@@ -1,0 +1,187 @@
+PDF AI — Proprietary Software License
+Copyright (c) 2026 Muhammad Khurram Shahzad. All rights reserved.
+
+CONTACT: m.khurram.me@gmail.com
+
+================================================================================
+NOTICE
+================================================================================
+This software (the "Software") is NOT open source. It is proprietary software
+owned exclusively by Muhammad Khurram Shahzad ("the Copyright Holder"). The
+MIT, Apache, GPL, and similar licenses DO NOT apply to this Software. No open
+source license is granted by this document.
+
+================================================================================
+1. DEFINITIONS
+================================================================================
+"Software" means this website, its complete source code, its design, its
+layout, its text, its graphics, its branding, its documentation, and all
+associated files, in whole or in part, including derivative works.
+
+"Deploy", "Hosting", or "Publish" means making the Software (or any
+substantial part of it) accessible to the public or to any third party over
+the internet or any network, including but not limited to uploading it to
+GitHub Pages, Netlify, Vercel, Cloudflare Pages, Firebase, AWS, a virtual
+private server, a shared host, a personal domain, or any comparable service.
+
+"Commercial Use" means any use of the Software, in whole or in part, with the
+objective of obtaining a financial advantage, revenue, profit, or commercial
+benefit, whether direct or indirect. This includes but is not limited to:
+operating a public website that generates advertising revenue, subscriptions,
+affiliate income, donations, or sales; reselling, licensing, or sublicensing
+the Software or its services; incorporating the Software into a paid product
+or service; and using the Software to attract customers to a business.
+
+================================================================================
+2. GRANT OF LICENSE — PERMITTED USE
+================================================================================
+Subject to the terms of this License, the Copyright Holder grants you a
+limited, personal, non-exclusive, non-transferable, revocable license to:
+
+  (a) download and install a copy of the Software on your own personal
+      computer or device;
+
+  (b) run and use the Software locally, for your own private, personal,
+      non-commercial purposes only.
+
+This license is granted to you individually. You may not assign, transfer, or
+sublicense it to any other person or entity.
+
+================================================================================
+3. RESTRICTIONS — WHAT YOU MAY NOT DO
+================================================================================
+Except with the prior written permission of the Copyright Holder, you may
+NOT:
+
+  (a) PUBLISH OR HOST. Deploy, host, publish, or otherwise make the Software
+      accessible on the internet or any network, in whole or in part, whether
+      alone or combined with other software. This expressly includes, without
+      limitation, hosting the Software on any public hosting provider or on
+      any domain name.
+
+  (b) COMMERCIAL USE. Use the Software, in whole or in part, for any
+      Commercial Use as defined in Section 1.
+
+  (c) REDISTRIBUTE. Distribute, sell, lease, rent, lend, license, or
+      sublicense the Software or copies of it to any third party, by any
+      means.
+
+  (d) MODIFY AND DISTRIBUTE. Create derivative works of the Software and
+      distribute, publish, or host them.
+
+  (e) REMOVE NOTICES. Remove, alter, or obscure any copyright notice,
+      trademark, or other proprietary notice contained in the Software.
+
+  (f) CIRCUMVENT. Attempt to bypass, disable, or defeat any term or
+      restriction of this License.
+
+================================================================================
+4. COMMERCIAL AND PUBLIC USE — HOW TO OBTAIN RIGHTS
+================================================================================
+Any Commercial Use of the Software, and any right to Deploy or Host the
+Software publicly, is STRICTLY RESERVED to the Copyright Holder.
+
+If you wish to use the Software commercially, or to host or publish it on the
+internet, you MUST first obtain a separate written licensing agreement with
+the Copyright Holder. Contact:
+
+    m.khurram.me@gmail.com
+
+Commercial rights are not included in this License and must be negotiated and
+agreed in writing in advance. Unauthorized Commercial Use or unauthorized
+publication is strictly prohibited and will be enforced.
+
+================================================================================
+5. OWNERSHIP
+================================================================================
+The Software is licensed, not sold. The Copyright Holder retains all right,
+title, and interest in and to the Software, including all copyrights,
+trademarks, trade secrets, and all intellectual property rights therein,
+whether or not the Copyright Holder is aware of such rights.
+
+This License does not grant you any ownership interest in the Software. All
+rights not expressly granted to you in Section 2 are strictly reserved to the
+Copyright Holder.
+
+================================================================================
+6. TERMINATION
+================================================================================
+This License is effective until terminated. The Copyright Holder may terminate
+it at any time, with or without cause, by written notice to you.
+
+This License terminates automatically, and without notice, if you breach any
+of its terms. Upon termination, you MUST immediately cease all use of the
+Software and permanently delete all copies of the Software in your possession
+or control, including any deployed or hosted copies.
+
+Sections 5, 7, and 8 of this License survive termination.
+
+================================================================================
+7. ENFORCEMENT AND LEGAL ACTION
+================================================================================
+The Copyright Holder takes unauthorized use of this Software seriously.
+
+Any use of the Software in violation of this License — including but not
+limited to unauthorized Hosting or Publication, unauthorized Commercial Use,
+or unauthorized Redistribution — constitutes COPYRIGHT INFRINGEMENT and a
+material breach of this License.
+
+In the event of any such unauthorized use, the Copyright Holder reserves the
+right, without limitation, to:
+
+  (a) demand, in writing, that you immediately cease all unauthorized use and
+      take down any deployed or hosted copy of the Software;
+
+  (b) file takedown notices (including DMCA takedown notices) with any and all
+      hosting providers, domain registrars, code hosting platforms (including
+      but not limited to GitHub), search engines, and payment providers
+      associated with the unauthorized use, in order to have the infringing
+      material removed and the website taken down;
+
+  (c) pursue legal action against you, including claims for copyright
+      infringement, breach of contract, and any other applicable claims; and
+
+  (d) seek monetary damages, injunctive relief (including court orders to stop
+      the use and take down the website), and recovery of all legal costs and
+      attorneys' fees incurred in enforcing its rights.
+
+You agree that unauthorized use may cause irreparable harm to the Copyright
+Holder for which monetary damages alone would be an inadequate remedy, and
+that the Copyright Holder shall be entitled to seek injunctive relief to stop
+such use.
+
+================================================================================
+8. GENERAL
+================================================================================
+  8.1  No Warranty. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+       KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+       MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+       NON-INFRINGEMENT. THE COPYRIGHT HOLDER DOES NOT WARRANT THAT THE
+       SOFTWARE IS ERROR-FREE, SECURE, OR UNINTERRUPTED.
+
+  8.2  Limitation of Liability. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE
+       COPYRIGHT HOLDER SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL,
+       SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF DATA, USE,
+       REVENUE, OR PROFIT, ARISING OUT OF OR IN CONNECTION WITH THE SOFTWARE
+       OR THIS LICENSE, WHETHER IN CONTRACT, TORT, OR OTHERWISE, EVEN IF THE
+       COPYRIGHT HOLDER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+  8.3  Governing Law. This License shall be governed by and construed in
+       accordance with the laws of the jurisdiction in which the Copyright
+       Holder resides, without regard to its conflict of law principles.
+
+  8.4  Entire Agreement. This License constitutes the entire agreement between
+       you and the Copyright Holder with respect to the Software and
+       supersedes all prior or contemporaneous understandings regarding such
+       subject matter.
+
+  8.5  Severability. If any provision of this License is held to be invalid or
+       unenforceable, the remaining provisions shall continue in full force
+       and effect.
+
+  8.6  Waiver. No failure or delay by the Copyright Holder in exercising any
+       right under this License shall operate as a waiver of such right.
+
+================================================================================
+END OF LICENSE
+================================================================================

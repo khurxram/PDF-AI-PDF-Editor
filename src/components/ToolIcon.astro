@@ -1,0 +1,38 @@
+---
+import type { Tool } from '../data/tools';
+import { categoryTone } from '../data/tools';
+const { tool, size = 'md' } = Astro.props as { tool: Tool; size?: 'sm' | 'md' | 'lg' };
+const tones = categoryTone;
+
+/* Shared page silhouette (24-unit box, drawn inside the 40-unit tile). */
+const page = '<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"/><path d="M13 2v7h7"/>';
+
+const glyphs: Record<string, string> = {
+	merge: '<path d="M3 8h4c3 0 4 4 7 4h6"/><path d="M3 16h4c3 0 4-4 7-4"/><path d="M17 9l3 3-3 3"/>',
+	split: '<path d="M3 12h7"/><path d="M10 12c3 0 4-4 7-4h4"/><path d="M10 12c3 0 4 4 7 4h4"/><path d="M18 6.5l3 1.5-3 1.5"/><path d="M18 14.5l3 1.5-3 1.5"/>',
+	remove: page + '<path d="m9 13.5 6 6"/><path d="m15 13.5-6 6"/>',
+	extract: page + '<path d="m13.5 18.5 5.5-5.5"/><path d="M14.5 13H19v4.5"/>',
+	organize: '<path d="M4 7h9"/><path d="M4 12h6"/><path d="M4 17h9"/><path d="M19 4.5v15"/><path d="m16.5 7 2.5-2.5 2.5 2.5"/><path d="m16.5 17 2.5 2.5 2.5-2.5"/>',
+	rotate: '<path d="M21 12a9 9 0 1 1-9-9c2.5 0 4.9 1 6.7 2.7L21 8"/><path d="M21 3v5h-5"/>',
+	scan: '<path d="M4 8V6a2 2 0 0 1 2-2h2"/><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M4.5 12h15"/>',
+	compress: '<rect x="9" y="6" width="6" height="12" rx="1.5"/><path d="M3 12h5"/><path d="M6 10l2 2-2 2"/><path d="M21 12h-5"/><path d="M18 10l-2 2 2 2"/>',
+	image: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M4 18 8.5 13.5 12 17l3-3 4.5 4.5"/>',
+	'images-pdf': '<path d="M8 6V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-1"/><rect x="3" y="7" width="13" height="13" rx="2"/><circle cx="7" cy="11" r="1.3"/><path d="M4 17.5 7.5 14l3 3.5 2-2 2.5 2.5"/>',
+	'word-pdf': page + '<path d="M7.5 13 10 18.5 12.5 14l2.5 4.5L17.5 13"/>',
+	'html-pdf': page + '<path d="m9.5 13-2.5 3 2.5 3"/><path d="m14.5 13 2.5 3-2.5 3"/><path d="m13.5 12-3 6"/>',
+	'pdf-word': page + '<path d="M7.5 13.5h9"/><path d="M7.5 16.5h9"/><path d="M7.5 19.5h5"/>',
+	'pdf-jpg': page + '<rect x="7" y="12.5" width="10" height="7" rx="1.5"/><circle cx="9.8" cy="14.9" r="1"/><path d="M7.5 19 10 16.5l2 2 1.5-1.5 3 2.5"/>',
+	markdown: page + '<path d="M7.5 19.5v-6L12 17.5l4.5-4v6"/>',
+	edit: page + '<path d="M9 18.5 9.6 16.1 15.5 10.2 17.3 12 11.4 17.9Z"/>',
+	numbers: page + '<path d="M10.5 13 9.5 19"/><path d="M14.5 13l-1 6"/><path d="M9 14.8h7"/><path d="M9 17.4h7"/>',
+	watermark: page + '<path d="M7.5 19 16.5 10"/><path d="M7.5 15 12.5 10"/>',
+	crop: '<path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/>',
+	sign: '<path d="M3.5 17.5c2-6.5 3.4-9.8 4.2-9.8.9 0 .5 4.7 1.8 4.7 1.2 0 2-3 3.3-3 .9 0 1.2 1.6.7 3.6"/><path d="M3.5 20.5h17"/>',
+	metadata: '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor" stroke="none"/>',
+	compare: '<rect x="2" y="6" width="6" height="12" rx="1.5"/><rect x="16" y="6" width="6" height="12" rx="1.5"/><path d="M9 11h4.5"/><path d="M12 9.5 13.5 11 12 12.5"/><path d="M15 14h-4.5"/><path d="M12 12.5 10.5 14 12 15.5"/>',
+	ocr: '<path d="M4 8V6a2 2 0 0 1 2-2h2"/><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M20 16v2a2 2 0 0 1-2 2h-2"/><path d="M8 20H6a2 2 0 0 1-2-2v-2"/><path d="M7.5 12h9"/><path d="M7.5 15.5h6"/>',
+	unavailable: '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6 18.4 18.4"/>'
+};
+const glyph = glyphs[tool.mode] ?? page;
+---
+<span class:list={['tool-icon', `tool-icon-${size}`, `tool-icon-${tones[tool.category] || 'blue'}`]} aria-hidden="true"><svg viewBox="0 0 40 40" focusable="false"><rect class="tool-icon-tile" x="2.5" y="2.5" width="35" height="35" rx="11"/><rect class="tool-icon-tile-line" x="3.2" y="3.2" width="33.6" height="33.6" rx="10.3"/><g class="tool-icon-glyph" transform="translate(7 7) scale(1.0833)" set:html={glyph}></g></svg></span>

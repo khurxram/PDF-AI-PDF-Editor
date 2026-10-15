@@ -1,0 +1,2 @@
+--- import type { Tool } from '../data/tools'; import ToolIcon from './ToolIcon.astro'; const { tool } = Astro.props as {tool:Tool}; ---
+<a class="tool-card" data-reveal href={`/${tool.slug}/`}><span class="tool-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.6 11.4 11.4 4.6"/><path d="M5.6 4.6h5.8v5.8"/></svg></span><ToolIcon tool={tool} /><h3>{tool.name}</h3><p>{tool.description}</p><span>Open tool</span></a>

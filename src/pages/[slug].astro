@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ToolWorkspace from '../components/ToolWorkspace.astro';
+import ToolIcon from '../components/ToolIcon.astro';
+import ToolCard from '../components/ToolCard.astro';
+import { tools, bySlug, stepsByMode, categoryTone } from '../data/tools';
+import { toolSeo } from '../data/tool-seo';
+
+export function getStaticPaths(){return tools.map(tool=>({params:{slug:tool.slug}}));}
+const tool=bySlug(Astro.params.slug!);
+if(!tool) return Astro.redirect('/404/');
+const steps = stepsByMode[tool.mode] ?? stepsByMode.default!;
+const unavailable = tool.mode === 'unavailable';
+const categoryId = tool.category.toLowerCase().replaceAll(' ','-');
+const related = [...tools.filter(t=>t.category===tool.category && t.slug!==tool.slug), ...tools.filter(t=>t.category!==tool.category)].slice(0,4);
+const flow = unavailable ? 'unavailable' : tool.mode === 'compare' ? 'compare' : (tool.mode === 'merge' || tool.mode === 'images-pdf') ? 'multi' : 'single';
+const accent = categoryTone[tool.category] || 'blue';
+const flowChip = flow==='compare' ? 'Exactly 2 files' : flow==='multi' ? 'Multiple files' : unavailable ? 'Not in this build' : '1 file at a time';
+const chips = unavailable ? [flowChip, tool.accept.split(',').join(' · '), '100% free'] : [flowChip, tool.accept.split(',').join(' · '), 'Runs in your browser', '100% free'];
+
+// Unique per-page metadata and supporting content (falls back to the raw tool entry).
+const seo = toolSeo[tool.slug];
+const title = seo?.title ?? `${tool.name} — PDF AI`;
+const description = seo?.description ?? tool.description;
+const intro = seo?.intro ?? tool.description;
+
+// Structured data only where the visible page content supports it.
+const jsonLd: Record<string, unknown>[] = [];
+if (!unavailable) {
+	jsonLd.push({
+		'@context': 'https://schema.org',
+		'@type': 'WebApplication',
+		name: tool.name,
+		url: new URL(`/${tool.slug}/`, Astro.site ?? 'https://pdfai.site').href,
+		description,
+		applicationCategory: 'UtilitiesApplication',
+		operatingSystem: 'Any',
+		isAccessibleForFree: true,
+		inLanguage: 'en',
+	});
+}
+if (seo?.faq?.length) {
+	jsonLd.push({
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: seo.faq.map((f) => ({
+			'@type': 'Question',
+			name: f.q,
+			acceptedAnswer: { '@type': 'Answer', text: f.a },
+		})),
+	});
+}
+---
+<BaseLayout title={title} description={description} ogType="website" jsonLd={jsonLd}>
+<div class="tool-page" data-accent={accent} data-flow={flow}>
+<section class="tool-hero container">
+	<nav class="breadcrumb" aria-label="Breadcrumb" data-reveal>
+		<a href="/#tools">All PDF tools</a><span aria-hidden="true">/</span><a href={`/#${categoryId}`}>{tool.category}</a><span aria-hidden="true">/</span><span aria-current="page">{tool.name}</span>
+	</nav>
+	<div class="tool-head" data-reveal>
+		<ToolIcon tool={tool} size="lg" />
+		<div class="tool-head-copy">
+			<h1>{tool.name}</h1>
+			<p class="lead">{intro}</p>
+			<ul class="chip-list">
+				{chips.map(chip => <li>{chip}</li>)}
+			</ul>
+		</div>
+	</div>
+</section>
+<section class="container tool-layout">
+	<div class="tool-main" data-reveal><ToolWorkspace tool={tool} /></div>
+	<aside class="tool-side">
+		<section class="side-card" data-reveal>
+			<h2>How it works</h2>
+			<ol class="steps">{steps.map((step,i)=><li><span class="step-num" aria-hidden="true">{i+1}</span><span>{step}</span></li>)}</ol>
+		</section>
+		{tool.limitation ? <section class="side-card" data-reveal><h2>Good to know</h2><p class="side-note">{tool.limitation}</p></section> : <section class="side-card" data-reveal><h2>Privacy</h2><p class="side-note">No signup, no uploads, no paid API. Your file is handled in this tab and disappears when you close it.</p></section>}
+		{unavailable && <section class="side-card" data-reveal><h2>What works instead</h2><p class="side-note">Every other tool on this site runs fully in your browser.</p><a class="button secondary side-button" href="/#tools">Browse all tools</a></section>}
+	</aside>
+</section>
+{seo && (
+<section class="container tool-guide">
+	<div class="tool-guide-grid">
+		<div class="guide-copy" data-reveal>
+			<h2>{seo.heading}</h2>
+			{seo.body.map(p => <p set:html={p} />)}
+		</div>
+		{seo.faq.length > 0 && (
+			<div class="tool-guide-faq" data-reveal>
+				<h2>Frequently asked questions</h2>
+				{seo.faq.map(f => <Fragment><h3>{f.q}</h3><p>{f.a}</p></Fragment>)}
+			</div>
+		)}
+	</div>
+</section>
+)}
+<section class="container tool-related">
+	<h2 class="eyebrow" data-reveal>SIMILAR TOOLS</h2>
+	<div class="tool-grid">{related.map(t=><ToolCard tool={t} />)}</div>
+</section>
+</div>
+</BaseLayout>

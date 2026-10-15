@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ToolCard from '../components/ToolCard.astro';
+import FaqSection from '../components/FaqSection.astro';
+import { categories, tools } from '../data/tools';
+
+const title = 'PDF AI – Free PDF Editor, Converter & Online PDF Tools';
+const description =
+	'Edit, merge, split, compress, and convert PDF files with PDF AI. Explore free online PDF tools to manage documents quickly and easily.';
+
+const stripTags = (s: string) => s.replace(/<[^>]+>/g, '');
+
+const faqs = [
+	{
+		q: 'What is PDF AI?',
+		a: 'PDF AI is an online platform for working with PDF documents: it brings together a <a href="/editor/">free PDF editor</a>, a PDF converter and other free online PDF tools for editing, converting, merging, splitting and compressing files. Available features depend on the tools implemented on the website, so check the individual tool page for what it supports and any restrictions.',
+	},
+	{
+		q: 'Is PDF AI free to use?',
+		a: 'PDF AI provides access to free PDF tools with no signup and no paid tier. Some features have processing or browser limitations. Check the individual tool page for its available functionality and any restrictions.',
+	},
+	{
+		q: 'Can I edit a PDF online for free?',
+		a: 'Yes. An online PDF editor lets you make supported changes without installing desktop software. The <a href="/editor/">free PDF editor</a> at PDF AI lets you add text, annotations, images, signatures and shapes. Editing existing text in a PDF has additional limitations, because the text is covered and redrawn rather than reflowed.',
+	},
+	{
+		q: 'How can I merge PDF files online?',
+		a: 'Open the <a href="/merge-pdf/">Merge PDF tool</a>, select the PDF files you want to combine, arrange them in the order you want, and start processing. Download the combined PDF when processing finishes — the merge runs in this browser tab.',
+	},
+	{
+		q: 'How do I compress a PDF online?',
+		a: 'Use the <a href="/compress-pdf/">Compress PDF tool</a> to reduce a document\'s file size: select your PDF, choose the available compression setting, and process the file. The amount of size reduction depends on the document\'s images, fonts, content and compression method, so results vary from document to document.',
+	},
+	{
+		q: 'Can I convert PDF to Word for free?',
+		a: 'Yes. The <a href="/pdf-to-word/">PDF to Word converter</a> can extract document content and create an editable Word file. Formatting, tables, images and complex layouts may not be reproduced perfectly, because the conversion is text-first. Check the tool page before relying on the result.',
+	},
+	{
+		q: 'How do I convert Word to PDF?',
+		a: 'Open the <a href="/word-to-pdf/">Word to PDF tool</a>, select your supported document, and follow the conversion instructions. The tool extracts the text and creates a simple PDF, so review the result to confirm its wording, fonts and page layout — complex Word layouts and styling are not preserved.',
+	},
+	{
+		q: 'Can I convert JPG images to PDF?',
+		a: 'Yes. The <a href="/jpg-to-pdf/">JPG to PDF tool</a> combines supported image files into a PDF document. Upload your JPG or PNG images, arrange them in the order you want, and create the PDF using the available options — each image becomes one page.',
+	},
+	{
+		q: 'Can I convert a PDF to JPG?',
+		a: 'Yes. The <a href="/pdf-to-jpg/">PDF to JPG converter</a> turns PDF pages into image files. Select the document, choose the scale and quality, process the pages you need, and download each resulting image. Image quality and output resolution depend on the converter\'s settings; a combined ZIP of every page is not included in this browser build.',
+	},
+	{
+		q: 'Can I split a PDF into separate files?',
+		a: 'Yes. The <a href="/split-pdf/">Split PDF tool</a> divides a document into smaller PDFs based on the pages you select: each selected page is saved as its own single-page file. Choose up to 30 pages at a time, then download the generated files.',
+	},
+	{
+		q: 'Do I need to install software to use PDF AI?',
+		a: 'No. PDF AI is designed as a browser-accessible website, so you can use a PDF editor online and the other free online PDF tools without installing a dedicated desktop application. Certain features may depend on your browser, available memory or supported file formats.',
+	},
+	{
+		q: 'Are my PDF files private and secure?',
+		a: 'PDF AI processes files locally: the tools read your document in this browser tab, nothing is uploaded for processing, and there are no accounts or databases behind the site. Files stay on your device and are released when you close the tab. Review the <a href="/privacy-policy/">Privacy Policy</a> and each tool\'s notes before working with sensitive documents.',
+	},
+	{
+		q: 'Can I use PDF AI on my phone?',
+		a: 'Yes. PDF AI is a responsive website, so you can use its free online PDF tools from a supported mobile browser. The experience depends on the device, browser capabilities, file size and the specific tool being used.',
+	},
+	{
+		q: 'Is PDF AI an alternative to Smallpdf or iLovePDF?',
+		a: 'PDF AI aims to provide convenient access to PDF editing, conversion and document-management tools. You can compare the available features, processing limits, privacy practices and user experience to decide which service best meets your needs. PDF AI is an independent service and is not affiliated with, endorsed by, or associated with those brands.',
+	},
+	{
+		q: 'Why is my PDF not processing?',
+		a: 'A PDF may fail to process if it is damaged, password-protected, too large for available memory, or incompatible with the selected tool. Try a supported file, check any password requirements, and use a smaller document if necessary — tool pages cap files at 100 MB. If the problem continues, consult the tool\'s error message or the <a href="/help/">help page</a>.',
+	},
+];
+
+const jsonLd = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: 'PDF AI',
+		url: 'https://pdfai.site/',
+		description,
+		inLanguage: 'en',
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: faqs.map((f) => ({
+			'@type': 'Question',
+			name: f.q,
+			acceptedAnswer: { '@type': 'Answer', text: stripTags(f.a) },
+		})),
+	},
+];
+---
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+<section class="hero"><div class="container hero-grid"><div class="hero-copy"><p class="eyebrow" data-reveal>LOCAL-FIRST PDF TOOLS</p><h1 data-reveal>Free PDF Editor and Online PDF Tools</h1><p class="lead" data-reveal>PDF AI is a free PDF editor and a set of PDF tools online. Edit, convert, merge, split and compress files in your browser — no downloads, no signup, no uploads.</p><div class="hero-cta" data-reveal><a class="button" href="#tools">Explore tools</a><a class="button secondary hero-editor-btn" href="/editor/"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 3.2 16.8 6.5 7.5 15.8l-4 .7.7-4z"/></svg>PDF Editor</a></div><p class="hero-editor-note" data-reveal>Open the full in-browser editor to edit text, add images, sign, crop and rearrange pages.</p></div><ul class="hero-points"><li class="hero-points-title" data-reveal>Private by design</li><li data-reveal>No signup</li><li data-reveal>Works 100% local</li><li data-reveal>100% free to use</li><li data-reveal>Privacy focused</li><li data-reveal>Simple and fast</li></ul></div></section>
+
+<section id="tools" class="container tools">
+	{categories.map(category => <section id={category.toLowerCase().replaceAll(' ','-')} class="category"><h3 data-reveal>{category}</h3><div class="tool-grid">{tools.filter(t=>t.category===category).map(tool=><ToolCard tool={tool} />)}</div></section>)}
+	<div class="tools-intro" data-reveal>
+		<h2>Free Online PDF Tools in One Place</h2>
+		<p>Instead of a different download for every task, PDF AI keeps free online PDF tools in one place. Pick the job you need, add a local file, adjust the settings and download the result. The directory above is an all-in-one PDF toolbox for editing, converting, organising and compressing documents.</p>
+	</div>
+</section>
+
+<div class="container home-sections">
+	<section class="home-section" data-reveal>
+		<h2>Privacy-Focused PDF Processing</h2>
+		<p>PDF AI is a static website: pages are served as plain files, and the work happens in JavaScript on your device. Your browser reads the file, processes it in memory, and writes the result to your downloads. Files are not uploaded for document processing, there are no accounts or databases, and nothing is kept once you close the tab. That applies everywhere, from the <a href="/merge-pdf/">PDF combiner</a> to the <a href="/compress-pdf/">PDF compressor</a>.</p>
+	</section>
+
+	<section class="home-section" data-reveal>
+		<h2>Why Choose PDF AI?</h2>
+		<p><strong>It is genuinely free.</strong> Every tool costs nothing — no trials, watermarked previews or paid tiers waiting behind the download button.</p>
+		<p><strong>Nothing to sign up for.</strong> There is no account system, so you go straight from landing on a page to working on your file.</p>
+		<p><strong>It runs where you already work.</strong> Any modern browser on desktop, tablet or phone is enough — no software to install.</p>
+		<p><strong>The limits are stated upfront.</strong> Every tool page explains what it can and cannot do.</p>
+	</section>
+</div>
+
+<div class="container home-sections">
+	<section class="home-section" data-reveal>
+		<h2>Edit PDF Online for Free</h2>
+		<p>The free PDF editor at <a href="/editor/">PDF AI</a> opens in your browser with a full toolbar: add text, draw freehand, highlight, insert images, add shapes, redact, create a typed or drawn signature, watermark, crop, and reorder or delete pages before you download.</p>
+		<p>Adding new content is straightforward; changing text already inside a PDF is not, because a PDF stores text at fixed positions. The editor covers the original and redraws your replacement over it — good for fixing a date or a typo, but it does not reflow the paragraph. For a quick note, the lighter <a href="/edit-pdf/">edit PDF tool</a> does it in seconds.</p>
+	</section>
+
+	<section class="home-section" data-reveal>
+		<h2>Convert PDF Files Easily</h2>
+		<p>Every converter here runs locally. The <a href="/pdf-to-word/">PDF to Word converter</a> pulls text into an editable DOCX, the <a href="/word-to-pdf/">Word to PDF converter</a> turns a DOCX into a shareable PDF, <a href="/jpg-to-pdf/">JPG to PDF</a> builds a document from photos or scans, and <a href="/pdf-to-jpg/">PDF to JPG</a> renders pages back into images.</p>
+		<p>You can also <a href="/pdf-to-markdown/">convert a PDF to Markdown</a> for editing or publishing, or <a href="/html-to-pdf/">render a local HTML file as a PDF</a>. Text-first conversions keep wording intact but do not rebuild complex layouts, so each tool states its limits before you process a file.</p>
+	</section>
+
+	<section class="home-section" data-reveal>
+		<h2>Merge, Split, and Organize PDF Files</h2>
+		<p>Documents rarely arrive in the right shape. <a href="/merge-pdf/">Merge PDF</a> combines files in the order you choose, <a href="/split-pdf/">split PDF online</a> breaks one document into several, and the <a href="/extract-pdf-pages/">extract</a> and <a href="/remove-pdf-pages/">remove PDF pages</a> tools keep only the pages that matter.</p>
+		<p><a href="/organize-pdf-pages/">Organize PDF pages</a> lets you drag thumbnails into a new order, while <a href="/rotate-pdf/">rotate PDF</a>, <a href="/add-page-numbers/">add page numbers</a> and <a href="/crop-pdf/">crop PDF</a> finish the job — turning a messy scan into a tidy, ordered document.</p>
+	</section>
+
+	<section class="home-section" data-reveal>
+		<h2>Compress PDF Files and Reduce File Size</h2>
+		<p>Large attachments bounce off email limits, and online forms reject oversized uploads. <a href="/compress-pdf/">Compress PDF online</a> re-renders pages at a lower resolution to reduce file size, while <a href="/reduce-pdf-size/">reduce PDF to a target size</a> aims at a specific number of megabytes.</p>
+		<p>How much smaller the result is depends on your pages — image-heavy documents shrink the most — and because compressed pages are rasterised, text may no longer be selectable. <a href="/compress-jpg/">Compress JPG</a> and <a href="/compress-png/">compress PNG</a> do the same for individual images.</p>
+	</section>
+</div>
+
+<FaqSection heading="Frequently Asked Questions About PDF AI" id="faq" items={faqs} />
+</BaseLayout>

@@ -1,0 +1,77 @@
+---
+/**
+ * Reusable <head> SEO block.
+ *
+ * Every public page renders this once (directly or through BaseLayout) so that
+ * titles, meta descriptions, canonical URLs, Open Graph and Twitter/X tags are
+ * generated from a single source of truth instead of being hand-copied.
+ *
+ * All URLs are absolute and derived from `site` in astro.config.mjs
+ * (https://pdfai.site) so canonical, og:url and og:image always match the
+ * production domain.
+ */
+export interface Props {
+	/** Page title. Rendered verbatim in <title> and og:title/twitter:title. */
+	title: string;
+	/** Meta description. Rendered in <meta name="description"> and og/twitter descriptions. */
+	description: string;
+	/** Absolute canonical URL. Defaults to the current pathname on the production site. */
+	canonicalURL?: string;
+	/** Path or absolute URL of the social sharing image (default: /og-image.png, 1200x630). */
+	ogImage?: string;
+	/** Alt text for the social sharing image. */
+	ogImageAlt?: string;
+	/** Open Graph type: "website" (default), "article", ... */
+	ogType?: string;
+	/** Set true for non-public pages (404, utility routes). */
+	noindex?: boolean;
+	/** Twitter/X card type. Defaults to summary_large_image. */
+	twitterCard?: string;
+	/** JSON-LD structured data object or array of objects, only when the page content supports it. */
+	jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+	title,
+	description,
+	canonicalURL,
+	ogImage = '/og-image.png',
+	ogImageAlt,
+	ogType = 'website',
+	noindex = false,
+	twitterCard = 'summary_large_image',
+	jsonLd,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://pdfai.site');
+const canonical = canonicalURL ?? new URL(Astro.url.pathname, site).href;
+const image = new URL(ogImage, site).href;
+const imageAlt = ogImageAlt ?? `${title} — PDF AI`;
+const ldJson = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : null;
+// Non-public pages have no stable public URL, so they are neither canonicalised nor shared.
+const shareURL = noindex ? undefined : canonical;
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, follow" />}
+{/* A 404/utility page has no stable public URL, so it is never canonicalised to one. */}
+{!noindex && <link rel="canonical" href={canonical} />}
+
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={ogType} />
+{shareURL && <meta property="og:url" content={shareURL} />}
+<meta property="og:image" content={image} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
+<meta property="og:site_name" content="PDF AI" />
+<meta property="og:locale" content="en_US" />
+
+<meta name="twitter:card" content={twitterCard} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={image} />
+<meta name="twitter:image:alt" content={imageAlt} />
+
+{ldJson && <script type="application/ld+json" set:html={ldJson} />}

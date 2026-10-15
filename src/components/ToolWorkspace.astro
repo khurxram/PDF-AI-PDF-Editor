@@ -1,0 +1,150 @@
+---
+import type { Tool } from '../data/tools';
+const { tool } = Astro.props as {tool:Tool};
+const mode = tool.mode;
+const showQuality = ['image','compress','pdf-jpg'].includes(mode);
+const showAnnotation = ['edit','watermark','sign'].includes(mode);
+const flow = mode === 'unavailable' ? 'unavailable' : mode === 'compare' ? 'compare' : (mode === 'merge' || mode === 'images-pdf') ? 'multi' : 'single';
+const pickModes = ['rotate','numbers','watermark','edit','sign','crop','pdf-jpg','split','remove','extract','compress'];
+const pagesMode = flow !== 'single' ? 'none' : mode === 'organize' ? 'reorder' : pickModes.includes(mode) ? 'pick' : 'none';
+const hasControls = showQuality || showAnnotation || ['compress','rotate','numbers','crop','pdf-jpg'].includes(mode);
+const isImage = tool.accept.startsWith('image');
+const heads: Record<string,[string,string,string,string]> = {
+	single: ['Try it now', 'Local processing only — files are not uploaded.', '1 file', 'Choose a supported file to begin.'],
+	multi: ['Add your files', 'Local processing only — files are not uploaded.', '2+ files', 'Add one or more files to begin.'],
+	compare: ['Add two files', 'Both files stay in this tab — nothing is uploaded.', '2 files', 'Add both files to begin.'],
+	unavailable: ['Not available in this build', 'This page never sends your files anywhere.', 'Not in this build', 'This tool does not run in this build.']
+};
+const [headTitle, headNote, flowLabel, initialStatus] = heads[flow]!;
+const chooseTitle = flow === 'multi' ? (isImage ? 'Choose images' : 'Choose files') : isImage ? 'Choose an image' : 'Choose a file';
+const accepted = tool.accept.split(',').join(' · ');
+const uploadIcon = `<svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13V3"/><path d="m6 7 4-4 4 4"/><path d="M3.5 12.5V15a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-2.5"/></svg>`;
+const title = (s:string) => s.split('-').map(w => w ? w[0]!.toUpperCase()+w.slice(1) : w).join(' ');
+const numPositions = ['bottom-right','bottom-center','bottom-left','top-right','top-center','top-left'];
+const editPositions = ['top-left','top-center','top-right','center','bottom-left','bottom-center','bottom-right'];
+const signPositions = ['bottom-right','bottom-left','bottom-center'];
+const cropSides = ['top','right','bottom','left'];
+const steps = [
+	['upload', 'Upload'],
+	['setup', 'Preview & settings'],
+	['result', 'Download']
+];
+---
+<section class="workspace" data-tool={JSON.stringify(tool)} data-flow={flow}>
+	<div class="workspace-head">
+		<h2>{headTitle}</h2>
+		<span class="flow-badge">{flowLabel}</span>
+		<p class="privacy-note">{headNote}</p>
+	</div>
+	{flow === 'unavailable' ? <div class="notice warning"><h3>Not available in this browser build</h3><p>{tool.limitation}</p><a href="/help/">Read browser limitations</a></div> : <>
+		<ol class="stepper" aria-label="How this tool works">
+			{steps.map(([id,label],i) => (
+				<li data-step-ind={id} class={i === 0 ? 'is-current' : undefined}><span>{i+1}</span>{label}</li>
+			))}
+		</ol>
+
+		<div class="step" data-step="upload">
+			{flow === 'compare' ? (
+				<div class="slot-grid">
+					{[0, 1].map(i => (
+						<div class="upload-slot">
+							<label class="dropzone" for={`file-input-${i}`}>
+								<span class="dropzone-icon" aria-hidden="true" set:html={uploadIcon}></span>
+								<strong>{i === 0 ? 'First document' : 'Second document'}</strong>
+								<span>or drag and drop it here</span>
+								<span class="dropzone-hint">Accepted: {accepted} · up to 100 MB</span>
+							</label>
+							<div class="slot-file" hidden></div>
+						</div>
+					))}
+				</div>
+			) : (
+				<label class="dropzone" id="dropzone" for="file-input">
+					<span class="dropzone-icon" aria-hidden="true" set:html={uploadIcon}></span>
+					<strong>{chooseTitle}</strong>
+					<span>or drag and drop it here</span>
+					<span class="dropzone-hint">Accepted: {accepted} · up to 100 MB</span>
+				</label>
+			)}
+			<p class="step-note">Your file is read in this browser tab and never uploaded.</p>
+		</div>
+
+		<div class="step" data-step="setup" hidden>
+			<div id="input-preview" class="input-preview" hidden></div>
+			<div id="file-list" class="file-list" hidden></div>
+			{pagesMode !== 'none' && (
+				<div class="page-picker" id="page-picker" data-pages-mode={pagesMode} hidden>
+					<div class="page-picker-head">
+						<strong>{pagesMode === 'reorder' ? 'Arrange your pages' : 'Preview & select pages'}</strong>
+						<span class="page-count" id="page-count"></span>
+						{pagesMode === 'pick' ? (
+							<span class="page-picker-actions">
+								<button type="button" class="page-btn" data-select="all">Select all</button>
+								<button type="button" class="page-btn" data-select="none">Select none</button>
+							</span>
+						) : (
+							<span class="page-picker-actions page-hint-inline">Drag to reorder · rotate or remove pages</span>
+						)}
+					</div>
+					<p class="page-picker-loading" id="page-picker-loading">Rendering preview…</p>
+					<div class="page-grid" id="page-grid"></div>
+					<p class="page-picker-hint" id="page-picker-hint" hidden></p>
+				</div>
+			)}
+			<div class:list={['controls', !hasControls && 'controls-bare']}>
+				{showQuality && <label class="field field-inline">Quality <span class="range-row"><input id="quality" type="range" min="35" max="100" value="75" /><output id="quality-output">75</output>%</span></label>}
+				{mode === 'compress' && <label class="field">Target MB <input id="target" type="number" min="1" max="100" value="5" /></label>}
+				{showAnnotation && <label class="field field-text">Text <input id="annotation" value={mode === 'watermark' ? 'CONFIDENTIAL' : mode === 'sign' ? 'Signed with PDF AI' : 'Note'} /></label>}
+				{mode === 'rotate' && <label class="field">Angle <select id="rotate-angle"><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></label>}
+				{mode === 'numbers' && <>
+					<label class="field">Position <select id="num-position">{numPositions.map(p => <option value={p}>{title(p)}</option>)}</select></label>
+					<label class="field">Start at <input id="num-start" type="number" min="0" value="1" /></label>
+					<label class="field field-inline">Font size <span class="range-row"><input id="num-size" type="range" min="8" max="24" value="12" /><output id="num-size-output">12</output>pt</span></label>
+				</>}
+				{mode === 'watermark' && <>
+					<label class="field field-inline">Font size <span class="range-row"><input id="wm-size" type="range" min="12" max="72" value="32" /><output id="wm-size-output">32</output>pt</span></label>
+					<label class="field field-inline">Opacity <span class="range-row"><input id="wm-opacity" type="range" min="10" max="100" value="30" /><output id="wm-opacity-output">30</output>%</span></label>
+					<label class="field field-inline">Angle <span class="range-row"><input id="wm-angle" type="range" min="0" max="90" value="35" /><output id="wm-angle-output">35</output>°</span></label>
+					<label class="field">Color <input id="wm-color" type="color" value="#333333" /></label>
+				</>}
+				{mode === 'edit' && <>
+					<label class="field field-inline">Font size <span class="range-row"><input id="edit-size" type="range" min="8" max="48" value="16" /><output id="edit-size-output">16</output>pt</span></label>
+					<label class="field">Color <input id="edit-color" type="color" value="#171717" /></label>
+					<label class="field">Position <select id="edit-position">{editPositions.map(p => <option value={p}>{title(p)}</option>)}</select></label>
+				</>}
+				{mode === 'sign' && <>
+					<label class="field">Font size <input id="sign-size" type="range" min="10" max="36" value="18" /></label>
+					<label class="field">Color <input id="sign-color" type="color" value="#111111" /></label>
+					<label class="field">Position <select id="sign-position">{signPositions.map(p => <option value={p}>{title(p)}</option>)}</select></label>
+				</>}
+				{mode === 'crop' && cropSides.map(side => <label class="field">{title(side)} <input id={`crop-${side}`} type="number" min="0" value="18" /></label>)}
+				{mode === 'pdf-jpg' && <label class="field">Scale <select id="jpg-scale"><option value="1">1×</option><option value="1.5" selected>1.5×</option><option value="2">2×</option></select></label>}
+			</div>
+			<div class="step-actions">
+				<button type="button" class="button secondary" id="back-upload">Choose a different file</button>
+				<button type="button" class="button" id="continue" disabled>Continue</button>
+			</div>
+		</div>
+
+		<div class="step" data-step="result" hidden>
+			<div class="result-head">
+				<h3>Here is your result</h3>
+				<p id="result-message" class="result-message"></p>
+			</div>
+			<div id="result-preview" class="result-preview"></div>
+			<div class="step-actions">
+				<button type="button" class="button secondary" id="back-setup">Back to preview</button>
+				<button type="button" class="button" id="download" disabled>Download</button>
+			</div>
+		</div>
+
+		<p id="file-status" class="status" aria-live="polite">{initialStatus}</p>
+		<div id="progress-wrap" class="progress-wrap" hidden><progress id="progress" max="100" value="0"></progress></div>
+		<div id="error" class="error" role="alert" hidden></div>
+		<div class="drop-overlay" aria-hidden="true"><span>Drop your file to add it</span></div>
+	</>}
+	{flow === 'compare'
+		? [0, 1].map(i => <input class="file-input" id={`file-input-${i}`} type="file" accept={tool.accept} data-slot={i} aria-label={`Choose file ${i + 1} for ${tool.name}`} />)
+		: <input class="file-input" id="file-input" type="file" accept={tool.accept} multiple={tool.mode === 'merge' || tool.mode === 'images-pdf'} aria-label={`Choose a file for ${tool.name}`} />}
+</section>
+<script>import '../styles/tool-picker.css'; import '../scripts/tool-workspace';</script>

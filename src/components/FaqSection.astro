@@ -1,0 +1,41 @@
+---
+export interface FaqItem {
+	q: string;
+	a: string;
+}
+
+export interface Props {
+	heading?: string;
+	id?: string;
+	items: FaqItem[];
+}
+
+const { heading = 'Frequently Asked Questions', id = 'faq', items } = Astro.props;
+
+// two independent columns (no shared grid rows): expanding an item only pushes
+// down the items in its own column, so the opposite column never shows a gap
+const half = Math.ceil(items.length / 2);
+const columns = [
+	items.slice(0, half).map((item, i) => ({ item, i })),
+	items.slice(half).map((item, i) => ({ item, i: i + half })),
+];
+---
+
+<section class="container faq" id={id} aria-labelledby={`${id}-title`}>
+	<h2 id={`${id}-title`} data-reveal>{heading}</h2>
+	<div class="faq-list">
+		{columns.map((column) => (
+			<div class="faq-col">
+				{column.map(({ item, i }) => (
+					<details class="faq-item" data-reveal style={`--reveal-delay:${Math.min(i * 40, 440)}ms`}>
+						<summary>
+							<h3>{item.q}</h3>
+							<svg class="faq-caret" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+						</summary>
+						<p class="faq-answer" set:html={item.a}></p>
+					</details>
+				))}
+			</div>
+		))}
+	</div>
+</section>
